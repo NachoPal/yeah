@@ -1,3 +1,5 @@
+require 'array_stats'
+
 module MarketService
   class Monitorize
 
