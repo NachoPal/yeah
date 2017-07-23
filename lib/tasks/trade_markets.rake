@@ -3,6 +3,11 @@ namespace :trade do
   desc 'Trade markets'
   task :markets => :environment do
 
+    def has_been_sold(wallet, buy_order, sell_order)
+      TransactionService::Close.new.fire!(buy_order, sell_order)
+      WalletService::Destroy.new.fire!(wallet, buy_order, sell_order)
+    end
+
     #============= CACHE POPULATION ====================
     result = MarketService::Monitorize.new.fire!
 
@@ -17,14 +22,23 @@ namespace :trade do
 
       #------- Sell --------
       if wallets.present?
-        OrderService::Sold.new.fire!(open_sell[:order], market.name)
+        wallet = wallets.last
+        market_to_sell = wallet.currency.market
+        transaction = market_to_sell.transactionns.joins(:account).
+                                     where(accounts: {id: 1}).all.last
+        sell_order = transaction.sells.last
+        buy_order = transaction.buys.last
 
-        if MarketService::ShouldBeSold.new.fire!(buy_order)
-          if OrderService::Sell.new.fire!(buy_order, wallet, market, true)
-            has_been_sold(wallet, transaction, market.name, market)
+        if OrderService::Sold.new.fire!(sell_order, market_to_sell.name)
+          sell_order = transaction.sells.last
+          has_been_sold(wallet, buy_order, sell_order)
+
+        elsif MarketService::ShouldBeSold.new.fire!(markets, market_to_sell.name, buy_order)
+
+          if OrderService::Sell.new.fire!(market_to_sell.name, wallet, buy_order, sell_order)
+            has_been_sold(wallet, buy_order, sell_order)
           end
         end
-
       else
       #------- Buy ---------
         sky_rocket_markets = MarketService::DetectSkyRocket.new.fire!(markets)
