@@ -40,8 +40,18 @@ namespace :trade do
           end
         end
       else
+
       #------- Buy ---------
-        sky_rocket_markets = MarketService::DetectSkyRocket.new.fire!(markets)
+        sky_rocket_market = MarketService::DetectSkyRocket.new.fire!(markets, 1, percentile_volume)
+
+        if sky_rocket_market.present?
+          #ME HE QUEDADO AQUI
+          bought = OrderService::Buy.new.fire!(market_record)
+
+          if bought[:success]
+            OrderService::Sell.new.fire!(bought[:order], bought[:wallet], market_record, false)
+          end
+        end
       end
     end
   end
