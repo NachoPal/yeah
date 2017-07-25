@@ -9,7 +9,7 @@ module MarketService
       current_price = market_info['Bid']
       growth = (((current_price * 100) / buy_price) - 100).round(2)
 
-      growth <= -5
+      growth <= THRESHOLD_OF_LOST
     end
   end
 end

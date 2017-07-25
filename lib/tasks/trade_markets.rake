@@ -3,9 +3,9 @@ namespace :trade do
   desc 'Trade markets'
   task :markets => :environment do
 
-    def has_been_sold(wallet, buy_order, sell_order)
-      TransactionService::Close.new.fire!(buy_order, sell_order)
-      WalletService::Destroy.new.fire!(wallet, buy_order, sell_order)
+    def has_been_sold(wallet, main_wallet, transaction, buy_order, sell_order)
+      TransactionService::Close.new.fire!(transaction, buy_order, sell_order)
+      WalletService::Destroy.new.fire!(wallet, main_wallet, sell_order)
     end
 
     #============= CACHE POPULATION ====================
@@ -30,13 +30,13 @@ namespace :trade do
         buy_order = transaction.buys.last
 
         if OrderService::Sold.new.fire!(sell_order, market_to_sell.name)
-          sell_order = transaction.sells.last
-          has_been_sold(wallet, buy_order, sell_order)
+          sell_order = transaction.sells.where(open: true).last
+          has_been_sold(wallet, main_wallet, transaction, buy_order, sell_order)
 
         elsif MarketService::ShouldBeSold.new.fire!(markets, market_to_sell.name, buy_order)
 
           if OrderService::Sell.new.fire!(market_to_sell.name, wallet, buy_order, sell_order)
-            has_been_sold(wallet, buy_order, sell_order)
+            has_been_sold(wallet, main_wallet, transaction, buy_order, sell_order)
           end
         end
       else
@@ -45,11 +45,13 @@ namespace :trade do
         sky_rocket_market = MarketService::DetectSkyRocket.new.fire!(markets, 1, percentile_volume)
 
         if sky_rocket_market.present?
-          #ME HE QUEDADO AQUI
-          bought = OrderService::Buy.new.fire!(market_record)
+
+          bought = OrderService::Buy.new.fire!(sky_rocket_market)
 
           if bought[:success]
-            OrderService::Sell.new.fire!(bought[:order], bought[:wallet], market_record, false)
+            transaction = bought[:transaction]
+            buy_order = bought[:order]
+            OrderService::PlaceSell.new.fire!(transaction, buy_order)
           end
         end
       end

@@ -1,7 +1,9 @@
 module OrderService
   class Buy
 
-    def fire!(market)
+    def fire!(market_name)
+      market = Market.where(name: market_name).first
+
       ask_orders = check_ask_orders(market.name)
 
       ask_orders.each do |ask_order|
@@ -13,9 +15,10 @@ module OrderService
 
           currency = Currency.where(name: market.name.split('-').last).first
 
-          new_wallet = WalletService::Create.new.fire!(currency, quantity, ask_order['Rate'])
+          #new_wallet = WalletService::Create.new.fire!(currency, quantity, ask_order['Rate'])
+          WalletService::Create.new.fire!(currency, quantity, ask_order['Rate'])
 
-          return bought.merge!({wallet: new_wallet}) if bought[:success]
+          return bought #.merge!({wallet: new_wallet}) if bought[:success]
         else
           next
         end
@@ -45,7 +48,7 @@ module OrderService
       Rails.logger.info "Current Price: #{price}"
       Rails.logger.info "----------------------------"
 
-      {success: true, order: buy_order}
+      {success: true, transaction: transaction, order: buy_order}
     end
   end
 end
