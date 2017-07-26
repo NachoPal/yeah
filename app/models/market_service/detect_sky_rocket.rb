@@ -7,7 +7,8 @@ module MarketService
         begin
           array_prices = CACHE.get(market['MarketName'])
 
-          steps = time_ago * 60 / PERIOD_SEG
+          #steps = time_ago * 60 / PERIOD_SEG
+          steps = time_ago / PERIOD_SEG
 
           array_prices.last(steps).delete(nil)
 

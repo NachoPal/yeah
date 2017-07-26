@@ -7,13 +7,13 @@ module OrderService
       bid_orders.each do |bid_order|
         if bid_order['Quantity'] >= wallet.balance
           OrderService::Cancel.new.fire!(sell_order) if sell_order.present?
-          sell(buy_order, bid_order['Rate'], wallet.balance, true)
-          return true
+          sell_order = sell(buy_order, bid_order['Rate'], wallet.balance, true)
+          return {sucess: true, order: sell_order}
         else
           next
         end
       end
-      false
+      {success: false, order: nil}
     end
 
     private
@@ -31,6 +31,8 @@ module OrderService
       transaction = buy_record.transactionn
 
       transaction.orderrs << sell_order
+
+      sell_order
     end
   end
 end

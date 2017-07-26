@@ -12,6 +12,8 @@ module TransactionService
      sell_price = sell_order.limit_price
      quantity = buy_order.quantity
 
+     Rails.logger.info "Buy price: #{buy_price} -- Sell price: #{sell_price}"
+
      benefit = BigDecimal.new(quantity * (sell_price - buy_price)).floor(8)
      percentage = BigDecimal.new((((sell_price * 100) / buy_price) - 100)).floor(2)
 

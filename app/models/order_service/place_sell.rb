@@ -10,6 +10,8 @@ module OrderService
                                     quantity_remaining: BigDecimal.new(0),
                                     open: true)
 
+      Rails.logger.info "Sell order place: #{sell_order.attributes}"
+
       transaction.orderrs << sell_order
     end
   end

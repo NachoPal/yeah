@@ -36,15 +36,15 @@ namespace :trade do
           has_been_sold(wallet, main_wallet, transaction, buy_order, sell_order)
 
         elsif MarketService::ShouldBeSold.new.fire!(markets, market_to_sell.name, buy_order)
-
-          if OrderService::Sell.new.fire!(market_to_sell.name, wallet, buy_order, sell_order)
-            has_been_sold(wallet, main_wallet, transaction, buy_order, sell_order)
+          sell = OrderService::Sell.new.fire!(market_to_sell.name, wallet, buy_order, sell_order)
+          if sell[:success]
+            has_been_sold(wallet, main_wallet, transaction, buy_order, sell[:order])
           end
         end
       else
 
       #------- Buy ---------
-        sky_rocket_market = MarketService::DetectSkyRocket.new.fire!(markets, 1, percentile_volume)
+        sky_rocket_market = MarketService::DetectSkyRocket.new.fire!(markets, 20, percentile_volume)
 
         if sky_rocket_market.present?
 
