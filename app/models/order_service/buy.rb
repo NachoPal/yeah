@@ -2,6 +2,7 @@ module OrderService
   class Buy
 
     def fire!(market_name)
+      Rails.logger.info "Market buy -- #{market_name}"
       market = Market.where(name: market_name).first
 
       ask_orders = check_ask_orders(market.name)

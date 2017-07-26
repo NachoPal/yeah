@@ -9,7 +9,7 @@ Bundler.require(*Rails.groups)
 module GoldenEggsHen2
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.1
+    #config.load_defaults 5.1
 
     Bittrex.config do |c|
       c.key = ENV["BITTREX_API_KEY"]

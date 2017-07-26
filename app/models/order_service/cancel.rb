@@ -2,7 +2,7 @@ module OrderService
   class Cancel
 
     def fire!(sell_order)
-        sell_order.first.destroy
+        sell_order.destroy
     end
   end
 end

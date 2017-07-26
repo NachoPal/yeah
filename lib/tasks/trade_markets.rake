@@ -20,6 +20,8 @@ namespace :trade do
       wallets = Wallet.all
       main_wallet = Wallet.main_wallet
 
+      wallets = wallets - [main_wallet]
+
       #------- Sell --------
       if wallets.present?
         wallet = wallets.last
@@ -30,7 +32,7 @@ namespace :trade do
         buy_order = transaction.buys.last
 
         if OrderService::Sold.new.fire!(sell_order, market_to_sell.name)
-          sell_order = transaction.sells.where(open: true).last
+          sell_order = transaction.sells.where(open: false).last
           has_been_sold(wallet, main_wallet, transaction, buy_order, sell_order)
 
         elsif MarketService::ShouldBeSold.new.fire!(markets, market_to_sell.name, buy_order)

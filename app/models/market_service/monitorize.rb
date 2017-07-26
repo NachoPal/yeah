@@ -10,9 +10,9 @@ module MarketService
 
       result[:markets] = exclude(markets)
 
-      result[:volume_percentile] = calculate_volume_percentile(result:[markets])
+      result[:percentile_volume] = calculate_volume_percentile(result[:markets])
 
-      result[:cache_population_finished] = save_in_cache(result:[markets])
+      result[:cache_population_finished] = save_in_cache(result[:markets])
 
       result
     end
@@ -52,7 +52,7 @@ module MarketService
         array_prices = CACHE.get(name)
 
         if array_prices.nil?
-          Rails.logger.info "TRUE"
+          #Rails.logger.info "TRUE"
           array_prices = Array.new(LENGTH_ARRAY_PRICES)
           #Rails.logger.info "SAVE -> Market: #{market} -- value: #{array_prices}\n\n"
           CACHE.set(name, array_prices)
