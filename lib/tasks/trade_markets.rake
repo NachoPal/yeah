@@ -13,10 +13,12 @@ namespace :trade do
 
     markets = result[:markets]
     percentile_volume = result[:percentile_volume]
+    Rails.logger.info "Percentile Volume: #{percentile_volume}"
     start_to_trade = result[:cache_population_finished]
 
     #============= TRADE ===============================
     if start_to_trade
+      Rails.logger.info "------------------------ Trade -----------------------------"
       wallets = Wallet.all
       main_wallet = Wallet.main_wallet
 
@@ -36,7 +38,9 @@ namespace :trade do
           has_been_sold(wallet, main_wallet, transaction, buy_order, sell_order)
 
         elsif MarketService::ShouldBeSold.new.fire!(markets, market_to_sell.name, buy_order)
+          Rails.logger.info ".............Should be sold..................\n"
           sell = OrderService::Sell.new.fire!(market_to_sell.name, wallet, buy_order, sell_order)
+          Rails.logger.info "Success: #{sell[:success]}"
           if sell[:success]
             has_been_sold(wallet, main_wallet, transaction, buy_order, sell[:order])
           end

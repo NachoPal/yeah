@@ -8,7 +8,7 @@ module OrderService
         if bid_order['Quantity'] >= wallet.balance
           OrderService::Cancel.new.fire!(sell_order) if sell_order.present?
           sell_order = sell(buy_order, bid_order['Rate'], wallet.balance, true)
-          return {sucess: true, order: sell_order}
+          return {success: true, order: sell_order}
         else
           next
         end
