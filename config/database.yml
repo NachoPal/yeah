@@ -80,6 +80,14 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
+
+staging:
+  <<: *default
+  database: golden_eggs_hen_staging
+  host: 127.0.0.1
+  username: deploy
+  password: deploy
+
 production:
   <<: *default
   database: golden_eggs_hen_production
