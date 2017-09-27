@@ -45,6 +45,13 @@ gem 'slim'
 gem 'bkoski-array_stats'
 gem 'dalli'
 
+# Use Capistrano for deployment
+gem 'capistrano', '3.4.0', require: false
+gem 'capistrano-bundler', '1.1.4', require: false
+gem 'capistrano-rails', '1.1.6', require: false
+gem 'capistrano-passenger', '~> 0.2.0'
+gem 'capistrano-rvm', '0.1.2', require: false
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   #gem 'byebug', platform: :mri
