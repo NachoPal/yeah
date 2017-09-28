@@ -16,6 +16,8 @@ namespace :trade do
     Rails.logger.info "Percentile Volume: #{percentile_volume}"
     start_to_trade = result[:cache_population_finished]
 
+    Rails.logger.info " #{result[:cache_population_finished]}"
+
     #============= TRADE ===============================
     if start_to_trade
       Rails.logger.info "------------------------ Trade -----------------------------"
