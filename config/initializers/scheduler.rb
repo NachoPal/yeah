@@ -9,7 +9,7 @@ trade = Rufus::Scheduler.singleton
 
 unless defined?(Rails::Console)
 
-  start.in '0.1s' do
+  start.in '60s' do
     CACHE.flush_all
     puts "====================== DESTRUYO ========================="
     Orderr.destroy_all
@@ -23,7 +23,7 @@ unless defined?(Rails::Console)
     Rake::Task['populate:wallets'].invoke(1)
   end
 
-  start_trade.in '30s' do
+  start_trade.in '90s' do
     trade.every "#{PERIOD_SEG}s" do
       Rake::Task['trade:markets'].reenable
       Rake::Task['trade:markets'].invoke
