@@ -20,7 +20,7 @@ namespace :trade do
 
     #============= TRADE ===============================
     if start_to_trade
-      Rails.logger.info "------------------------ Trade -----------------------------"
+      Rails.logger.info "------------------------ Trade ------------------------------"
       wallets = Wallet.all
       main_wallet = Wallet.main_wallet
 
