@@ -18,7 +18,7 @@ module MarketService
           #Rails.logger.info array_prices
 
           if growth > SKY_ROCKET_GAIN &&
-             market['BaseVolume'] >= percentile_volume && good_trend
+             market['BaseVolume'] >= percentile_volume && good_trend(array_prices)
 
             single_growth = single_buyer(array_prices)
             Rails.logger.info "#{market['MarketName']} - Single Growth: #{single_growth}"
