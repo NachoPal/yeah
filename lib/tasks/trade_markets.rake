@@ -50,7 +50,7 @@ namespace :trade do
       else
 
       #------- Buy ---------
-        sky_rocket_market = MarketService::DetectSkyRocket.new.fire!(markets, 60, percentile_volume)
+        sky_rocket_market = MarketService::DetectSkyRocket.new.fire!(markets, percentile_volume)
 
         if sky_rocket_market.present?
 
