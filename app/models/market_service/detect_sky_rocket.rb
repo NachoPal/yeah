@@ -56,7 +56,7 @@ module MarketService
         positive = trend.count(true).to_f
         negative = trend.count(false).to_f
 
-        (negative/positive) * 100 < TREND_THRESHOLD
+        (negative/positive) * 100 <= TREND_THRESHOLD
       end
     end
   end
