@@ -47,7 +47,7 @@ module MarketService
       markets.each do |market|
 
         name = market['MarketName']
-        price =  market['Last']
+        price =  market['Ask']
 
         array_prices = CACHE.get(name)
 

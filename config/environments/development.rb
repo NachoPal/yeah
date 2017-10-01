@@ -55,5 +55,5 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.active_record.logger = nil
-  config.log_level = :error
+  #config.log_level = :error
 end

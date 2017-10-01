@@ -12,7 +12,12 @@ class ReportsController < ApplicationController
 
       growth = (((current_price * 100) / buy_price) - 100).round(2)
 
-      @transactions << {name: transaction.market.name,
+      time = transaction.buys.first.created_at.to_time.to_s
+      time.slice!('+0000')
+
+
+      @transactions << {time: time,
+                        name: transaction.market.name,
                         open: transaction.sells.present? ? transaction.sells.first.open : true,
                         quantity: transaction.buys.first.quantity,
                         buy: transaction.buys.first.limit_price,

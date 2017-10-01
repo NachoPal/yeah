@@ -1,14 +1,16 @@
 module OrderService
   class Buy
 
-    def fire!(market_name)
+    def fire!(market_name, main_wallet)
       Rails.logger.info "Market buy -- #{market_name}"
       market = Market.where(name: market_name).first
 
       ask_orders = check_ask_orders(market.name)
 
       ask_orders.each do |ask_order|
-        quantity = BTC_QUANTITY_TO_BUY / ask_order['Rate']
+        #quantity = BTC_QUANTITY_TO_BUY / ask_order['Rate']
+        quantity = main_wallet.balance.to_f / ask_order['Rate']
+
 
         if quantity <= ask_order['Quantity']
 

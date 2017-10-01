@@ -54,7 +54,7 @@ namespace :trade do
 
         if sky_rocket_market.present?
 
-          bought = OrderService::Buy.new.fire!(sky_rocket_market)
+          bought = OrderService::Buy.new.fire!(sky_rocket_market, main_wallet)
 
           if bought[:success]
             transaction = bought[:transaction]
