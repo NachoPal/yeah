@@ -29,6 +29,7 @@ module MarketService
             #end
           end
 
+
         rescue  => e
           Rails.logger.info "Error: #{e}"
           Rails.logger.info "GET - > Market: #{market['MarketName']} -- growth: #{growth} -- percentil: #{percentile_volume}\n\n value: #{array_prices} \n\n"
